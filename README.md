@@ -244,12 +244,6 @@ Base URL: `https://localhost:7001`
 
 ---
 
-## License
-
-(Choose a license, e.g., MIT.)
-
----
-
 ## Maintainers
 
 - **TechHive Solutions – Internal Tools**
