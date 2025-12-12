@@ -87,7 +87,7 @@ app.UseAuthorization();
 
 
 // 3) Lightweight security (content-type + size; then headers)
-// Place BEFORE Swagger so responses from Swagger also get headers.
+// BEFORE Swagger so responses from Swagger also get headers.
 app.UseMiddleware<LightweightRequestGuardMiddleware>();
 app.UseMiddleware<LightweightSecurityHeadersMiddleware>();
 

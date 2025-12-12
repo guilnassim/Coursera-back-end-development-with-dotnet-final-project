@@ -208,7 +208,10 @@ Base URL: `https://localhost:7001`
 2. **Authentication & Authorization**  
    - Validates **JWT** tokens; returns **401** on missing/invalid tokens.
 
-3. **RequestResponseLoggingMiddleware** *(last)*  
+3. **Lightweight security content-type + size then headers**
+    - BEFORE Swagger so responses from Swagger also get security.
+
+4. **RequestResponseLoggingMiddleware** *(last)*  
    - Auditing logs: **method**, **path**, **status**.
    - Adds/echoes **X-Correlation-ID**.
 
@@ -217,7 +220,8 @@ Base URL: `https://localhost:7001`
 ---
 
 ## Validation
-
+- Request‑Guard for content‑type + size
+- Validation for API‑safe headers 
 - Input validation uses **static helper methods** (`UserRequestValidators.cs`) that throw `ArgumentException` for invalid inputs.
 - Domain entity (`User`) enforces invariants on create/update.
 - For client-friendly errors, map validation exceptions to **400 Bad Request** (either in endpoints or by enhancing error middleware).
