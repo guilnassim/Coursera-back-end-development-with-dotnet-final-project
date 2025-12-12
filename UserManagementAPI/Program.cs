@@ -11,6 +11,7 @@ using TechHive.UserManagement.Application.Classes;
 using TechHive.UserManagement.Application.Interfaces;
 using TechHive.UserManagement.Application.POCO;
 using TechHive.UserManagement.Infrastructure;
+using UserManagementAPI.Contracts;
 using UserManagementAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,6 +85,13 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+// 3) Lightweight security (content-type + size; then headers)
+// Place BEFORE Swagger so responses from Swagger also get headers.
+app.UseMiddleware<LightweightRequestGuardMiddleware>();
+app.UseMiddleware<LightweightSecurityHeadersMiddleware>();
+
+
 // Swagger UI (available in Development; move outside if you want always-on)
 if (app.Environment.IsDevelopment())
 {
@@ -91,7 +99,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// 3) Logging (last, as requested)
+// 4) Logging (last, as requested)
 app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 // ==== Endpoints ====
@@ -100,11 +108,11 @@ app.UseMiddleware<RequestResponseLoggingMiddleware>();
 app.MapGet("/", () => Results.Ok(new { app = "TechHive UserManagementAPI", version = "v1" }));
 
 // Dev token issuing endpoint (for testing only)
-app.MapPost("/auth/token", (string subject) =>
+app.MapPost("/auth/token", [AllowAnonymous] (TokenRequest req) =>
 {
     var claims = new[]
     {
-        new Claim(JwtRegisteredClaimNames.Sub, subject),
+        new Claim(JwtRegisteredClaimNames.Sub, req.Subject),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         new Claim("scope", "users.read users.write")
     };
