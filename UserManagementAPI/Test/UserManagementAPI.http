@@ -1,14 +1,14 @@
 # For more info on HTTP files go to https://aka.ms/vs/httpfile
 
 @scheme = https
-@host = localhost:7001
+@host = localhost:7035
 @baseUrl = {{scheme}}://{{host}}
 
 ### Get Token (DEV only)
 POST {{baseUrl}}/auth/token?subject=hr.user@techhive.local
 
 ### Paste the token below (without quotes)
-@token = REPLACE_WITH_JWT
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJoci51c2VyQHRlY2hoaXZlLmxvY2FsIiwianRpIjoiNTkyNmE3YzktNmZjZS00NjJjLTlkODYtMWJlODJhNDM3YzI4Iiwic2NvcGUiOiJ1c2Vycy5yZWFkIHVzZXJzLndyaXRlIiwibmJmIjoxNzY1NTM5OTU3LCJleHAiOjE3NjU1NDE3NTcsImlzcyI6IlRlY2hIaXZlLlVzZXJNYW5hZ2VtZW50IiwiYXVkIjoiVGVjaEhpdmUuSW50ZXJuYWxUb29scyJ9.nXnSnBr6sf6zi-czU6808c98BTp9TlT0riWwzzgaPt8
 
 ### List users (requires token)
 GET {{baseUrl}}/api/users?page=1&pageSize=10
@@ -71,4 +71,3 @@ Authorization: Bearer {{token}}
 GET {{baseUrl}}/api/users/boom
 Authorization: Bearer {{token}}
 
-### Swagger UI (open in browser)
