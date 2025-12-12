@@ -1,0 +1,74 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+
+@scheme = https
+@host = localhost:7001
+@baseUrl = {{scheme}}://{{host}}
+
+### Get Token (DEV only)
+POST {{baseUrl}}/auth/token?subject=hr.user@techhive.local
+
+### Paste the token below (without quotes)
+@token = REPLACE_WITH_JWT
+
+### List users (requires token)
+GET {{baseUrl}}/api/users?page=1&pageSize=10
+Authorization: Bearer {{token}}
+X-Correlation-ID: demo-001
+
+### Create user (valid)
+POST {{baseUrl}}/api/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "Ada",
+  "lastName": "Lovelace",
+  "email": "ada@techhive.local",
+  "department": "R&D",
+  "isActive": true
+}
+
+### Create user (invalid email -> 400 via error middleware)
+POST {{baseUrl}}/api/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "Alan",
+  "lastName": "Turing",
+  "email": "invalid-email",
+  "department": "AI",
+  "isActive": true
+}
+
+### Get user by id (replace if needed)
+@userId = 1
+GET {{baseUrl}}/api/users/{{userId}}
+Authorization: Bearer {{token}}
+
+### Update user
+PUT {{baseUrl}}/api/users/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "Ada",
+  "lastName": "Lovelace",
+  "email": "ada@techhive.local",
+  "department": "Platform",
+  "isActive": false
+}
+
+### Delete user
+DELETE {{baseUrl}}/api/users/{{userId}}
+Authorization: Bearer {{token}}
+
+### Get non-existent user -> 404
+GET {{baseUrl}}/api/users/99999
+Authorization: Bearer {{token}}
+
+### Trigger exception -> 500 standardized JSON
+GET {{baseUrl}}/api/users/boom
+Authorization: Bearer {{token}}
+
+### Swagger UI (open in browser)
